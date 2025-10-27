@@ -1,0 +1,113 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Behavioral Exposure Report: WolfKnighthawk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f4f4f9; color: #1f2a44; }
+    .quote { border-left: 4px solid #4b5563; background-color: #f9fafb; padding: 1rem; margin: 1rem 0; font-style: italic; border-radius: 0.25rem; }
+    .section { background-color: white; padding: 2rem; margin: 1.5rem 0; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .nav-link { color: #1e40af; text-decoration: none; }
+    .nav-link:hover { text-decoration: underline; }
+    h1, h2, h3 { color: #1f2a44; }
+    @media (max-width: 640px) { .section { padding: 1rem; } h1 { font-size: 1.5rem; } }
+  </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <header class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-2">Behavioral Exposure Report: WolfKnighthawk</h1>
+      <p class="text-lg text-gray-600">Analysis of a Toxic Ally in the Utherverse Forums</p>
+      <p class="text-sm text-gray-500 mt-2">Compiled on October 26, 2025, from public posts in the Utherverse forums (2012–2025). All quotes are verbatim.</p>
+    </header>
+
+    <nav class="mb-6 text-center">
+      <a href="#introduction" class="nav-link mx-2">Introduction</a> |
+      <a href="#support" class="nav-link mx-2">Selective Support</a> |
+      <a href="#similarities" class="nav-link mx-2">Stylistic Similarities</a> |
+      <a href="#tos" class="nav-link mx-2">TOS Analysis</a>
+    </nav>
+
+    <section id="introduction" class="section">
+      <h2 class="text-2xl font-semibold mb-4">Introduction</h2>
+      <p class="mb-4">This report analyzes the behavior of <strong>WolfKnighthawk</strong> (joined Utherverse on 6/3/2012, 35 posts, Novice Forum Member), a user who acts as a consistent ally of <a href="https://lustrous-selkie-c6cabb.netlify.app/" class="nav-link" target="_blank">DarkLadyJADE</a>, amplifying her toxic accusations and contributing to disruption in the Utherverse forums. His posts, particularly in the "ATENTION: THEFT of LAYOUT FROM SWAGBAG" thread (October 2025), reflect a pattern of selective support, accusatory language similar to Jade’s, and an attempt to disguise aggression under a pseudo-neutral tone. This analysis, based on 25 public posts (2012–2025), evaluates his role, potential violations of the <a href="https://www.utherverse.com/Sites/RLC/RulesOfConduct.aspx" class="nav-link" target="_blank">Rules of Conduct</a> and <a href="https://www.utherverse.com/new/legacy/tos.aspx" class="nav-link" target="_blank">TOS</a>, and his impact on the community.</p>
+    </section>
+
+    <section id="support" class="section">
+      <h2 class="text-2xl font-semibold mb-4">Pattern 1: Selective Support for DarkLadyJADE</h2>
+      <p class="mb-4">WolfKnighthawk primarily emerges to defend DarkLadyJADE, especially in the 2025 Swagbag Theft thread, where his posts (#44, #52, #54) amplify her accusations of theft against Rumi (ID# 104995194) and Mira (ID# 103937561) without providing new evidence. His limited activity (35 posts in 13 years) suggests a role of selective reinforcement, appearing in key moments to back Jade.</p>
+      <div class="quote">"WOW! From what I read on here... two people admitted of attempting and/or committing theft... I applaud DarkLadyJADE for speaking out... So anyone beware, do the wrong thing, she will say something." (#54, October 23, 2025)</div>
+      <div class="quote">"Yes I know DarkLadyJADE can be insane. But she had the right to publicly warn... She a hell of a crusader." (#52, about 7 hours ago)</div>
+      <div class="quote">"I saw the evidence myself... Did you acquire a property from swagbag and make a profit without... permission?... If not, then it is theft." (#44, 22 days ago)</div>
+      <p class="mb-4">This pattern extends to earlier posts. In 2012, he defended Jade’s frustration with Utherverse staff: "I see what DarkLadyJADE meant and see why she pist" (My lack of confidence of UV Techies). He also references collaboration with her in technical matters: "This is what DarkLadyJADE and I do to keep a functionable property" (#5, Textures, 3 months ago), and makes a playful remark supporting her: "Note to self. Get Jade some Kryptonite for protection" (#15, Guide Program Open House, about a year ago). Four of his 25 posts (16%) directly support Jade, a high percentage for a low-activity user, indicating a pattern of selective reinforcement.</p>
+    </section>
+
+    <section id="similarities" class="section">
+      <h2 class="text-2xl font-semibold mb-4">Pattern 2: Stylistic Similarities and Disguise</h2>
+      <p class="mb-4">WolfKnighthawk uses accusatory and moralizing language similar to DarkLadyJADE’s, with grammatical errors ("allot", "complexed") and an ironic signature ("Does Selfless acts for selfish reasons") that echoes Jade’s inflammatory rhetoric ("NO LIVES MATTER!!"). He often disguises aggression with pseudo-neutral phrases like "From what I read" or "I ask this", before escalating to attacks or moralizing statements.</p>
+      <div class="quote">"such insistence of this BB_Licious... not the right call... continue the rants and it will only prove how insane you think" (#52, about 7 hours ago)</div>
+      <div class="quote">"As I read and gather, and I deal with such fraud and scammers in Real Life, I can say is this... BE PROACTIVE AND VIGILANT! KNOWING IS HALF THE BATTLE!" (#10, Fraud alert, 3 years ago)</div>
+      <div class="quote">"Anyone else in different opinion is only causing chaos and disrespect to the other members." (#7, Server Downtime, about a year ago)</div>
+      <p class="mb-4">His technical posts reflect a rigid style and errors similar to Jade’s (e.g., "complexed" in #8, VirtualCon 2024: "is more complexed and allot of files"). In #17 (Bulletin CRAP, 12 years ago), he moralizes about spam: "If many place those agressive spammers on ignore, they got nobody to spam. Which is the truth." The immediate timing of #54 after Jade’s #53 and mentions of collaboration ("This is what DarkLadyJADE and I do", #5) raise questions about whether he is a close ally or an alternate account.</p>
+    </section>
+
+    <section id="tos" class="section">
+      <h2 class="text-2xl font-semibold mb-4">Pattern 3: Violations of Rules of Conduct and TOS</h2>
+      <p class="mb-4">WolfKnighthawk’s posts violate the <a href="https://www.utherverse.com/Sites/RLC/RulesOfConduct.aspx" class="nav-link" target="_blank">Rules of Conduct</a> through mild bullying, defamation, and community disruption. His attacks on critics and amplification of unevidenced accusations harm reputations and prolong conflicts. While his low activity and exclusive support for Jade raise suspicions of being an alternate account, there is no concrete evidence (e.g., IP data) to confirm this violation, making it a speculative concern that requires further investigation.</p>
+      <ul class="list-disc pl-6 mb-4">
+        <li><strong>Harassment and Bullying</strong>: Attacking critics like BB_Licious_Sinn ("such insistence... not the right call... prove how insane you think", #52; "such insistence... not the right call", #54) implies they are wrong or "insane", fostering a hostile environment. Similarly, in #7 (Server Downtime), he dismisses critics: "Anyone else in different opinion is only causing chaos and disrespect."</li>
+        <li><strong>Defamation</strong>: Reinforcing theft accusations without evidence ("two people admitted of... theft", #54; "If not, then it is theft", #44) damages Rumi and Mira’s reputations, violating the rule against misleading information.</li>
+        <li><strong>Community Disruption</strong>: Amplifying Jade’s drama in the Swagbag Theft thread (#44, #52, #54) and moralizing in #10 ("BE PROACTIVE AND VIGILANT!") prolongs conflicts, breaching the rule against disruptive behavior.</li>
+        <li><strong>Multi-Profiles (Speculative)</strong>: His low activity and exclusive support for Jade suggest he could be an alternate account, which would violate TOS (Section VII). However, without evidence such as shared IP addresses, this remains speculative and cannot be confirmed without further information.</li>
+      </ul>
+      <p class="mb-4">These violations warrant warnings or temporary suspensions (1–7 days). A coordinated report with screenshots (#44, #52, #54, #7, #10) to <a href="mailto:worldops@utherverse.com" class="nav-link">worldops@utherverse.com</a> could lead to sanctions.</p>
+    </section>
+
+    <footer class="text-center mt-8 text-gray-500">
+      <p>&copy; 2025 Independent Analysis. For community accountability and awareness of toxic behaviors. See also: <a href="https://lustrous-selkie-c6cabb.netlify.app/" class="nav-link">DarkLadyJADE Report</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>
